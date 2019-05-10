@@ -18,6 +18,7 @@ type Props = InjectedProps & {
   lazy?: boolean,
   tabBarComponent?: React.ComponentType<*>,
   tabBarOptions?: TabBarOptions,
+  tabBarPosition?: 'top' | 'bottom',
 };
 
 type State = {
@@ -112,12 +113,13 @@ class TabNavigationView extends React.PureComponent<Props, State> {
   };
 
   render() {
-    const { navigation, renderScene, lazy } = this.props;
+    const { navigation, renderScene, lazy, tabBarPosition } = this.props;
     const { routes } = navigation.state;
     const { loaded } = this.state;
 
     return (
       <View style={styles.container}>
+        {tabBarPosition === "top" && this._renderTabBar()}
         <ScreenContainer style={styles.pages}>
           {routes.map((route, index) => {
             if (lazy && !loaded.includes(index)) {
@@ -138,7 +140,7 @@ class TabNavigationView extends React.PureComponent<Props, State> {
             );
           })}
         </ScreenContainer>
-        {this._renderTabBar()}
+        {tabBarPosition !== "top" && this._renderTabBar()}
       </View>
     );
   }
